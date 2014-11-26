@@ -1,11 +1,5 @@
 #!/bin/bash
 
-__check() {
-if [ -f /var/www/html/wp-config.php ]; then
-  exit
-fi
-}
-
 __create_user() {
 # Create a user to SSH into as.
 SSH_USERPASS=`pwgen -c -n -1 8`
@@ -51,10 +45,6 @@ s/password_here/$WORDPRESS_PASSWORD/
 /'NONCE_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/" /var/www/html/wp-config-sample.php > /var/www/html/wp-config.php
 }
 
-__httpd_perms() {
-chown apache:apache /var/www/html/wp-config.php
-}
-
 __start_mysql() {
 # systemctl start mysqld.service
 mysqladmin -u root password $MYSQL_PASSWORD 
@@ -68,10 +58,8 @@ supervisord -n
 }
 
 # Call all functions
-__check
 # __create_user
 __mysql_config
-__handle_passwords
-__httpd_perms
-__start_mysql
+#__handle_passwords
+#__start_mysql
 __run_supervisor

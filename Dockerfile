@@ -10,21 +10,24 @@ RUN yum -y update; yum clean all
 RUN yum -y install epel-release; yum clean all
 
 ## Install Apache + MySQL + PHP and some command line utilities
-RUN yum -y install httpd mysql mysql-server php php-mysql php-gd pwgen supervisor tar; yum clean all
+RUN yum -y install httpd mysql mysql-server php php-mysql php-gd pwgen supervisor tar nano; yum clean all
 
-ADD ./docker-template/start.sh          /root/start.sh
+ADD ./docker-template/run.sh            /root/run.sh
 ADD ./docker-template/foreground.sh     /etc/apache2/foreground.sh
-ADD ./docker-template//supervisord.conf  /etc/supervisord.conf
+ADD ./docker-template//supervisord.conf /etc/supervisord.conf
 
 RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
 
-RUN chmod 755 /root/start.sh /etc/apache2/foreground.sh
+RUN chmod 755 /root/run.sh /etc/apache2/foreground.sh
 
 VOLUME ["/var/www/html"]
 
 EXPOSE 80
 
-#CMD ["/bin/bash", "/root/start.sh"]
+# The following commands will only be run for `docker run`,
+# not when building the virtual machine.
+
+CMD ["/bin/bash", "/root/run.sh"]
 
 
 

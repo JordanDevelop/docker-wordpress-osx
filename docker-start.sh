@@ -1,0 +1,1 @@
+docker run -d -P --name "test" -v "/Users/robbert/Sites/docker-wordpress/wordpress:/var/www/html" "docker-wordpress-osx:centos6" /etc/apache2/foreground.sh

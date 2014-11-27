@@ -9,5 +9,7 @@ BRANCH=$(__current_git_branch)
 TAG="$REPO:$BRANCH"
 CONTAINER="${REPO}_$BRANCH"
 
-echo "Starting interactive shell on $CONTAINER..."
-docker exec -it "$CONTAINER" /bin/bash
+
+# Stop the container for the current branch and remove it.
+docker stop "$CONTAINER"
+docker rm   "$CONTAINER"

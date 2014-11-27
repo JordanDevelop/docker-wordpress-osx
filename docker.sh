@@ -7,6 +7,7 @@ git rev-parse --abbrev-ref HEAD
 REPO=`git remote -v | grep '(fetch)' | sed 's=.*/==;s/\.[^.]*$//'`
 BRANCH=$(__current_git_branch)
 TAG="$REPO:$BRANCH"
+CONTAINER="${REPO}_$BRANCH"
 CWD=`pwd`
 HTDOCS_HOST="$CWD/wordpress"
 HTDOCS_VM="/var/www/html"
@@ -43,11 +44,11 @@ echo "Hosting '$HTDOCS_HOST' at port 80"
 # The . at the end instructs to look for a Dockerfile in the current dir
 # 
 # https://docs.docker.com/reference/commandline/cli/#run
-docker run -d -P --name "$BRANCH" -v "$HTDOCS_HOST:$HTDOCS_VM" "$TAG" /etc/apache2/foreground.sh
+docker run -d -P --name "$CONTAINER" -v "$HTDOCS_HOST:$HTDOCS_VM" "$TAG" /etc/apache2/foreground.sh
 
 
 IP=$(boot2docker ip)
-PORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' "$BRANCH"`
+PORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' "$CONTAINER"`
 
 echo ""
 echo ""

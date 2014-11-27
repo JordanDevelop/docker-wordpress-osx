@@ -9,5 +9,8 @@ BRANCH=$(__current_git_branch)
 TAG="$REPO:$BRANCH"
 CONTAINER="${REPO}_$BRANCH"
 
-echo "Starting interactive shell on $CONTAINER..."
-docker exec -it "$CONTAINER" /bin/bash
+IP=$(boot2docker ip)
+PORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' "$CONTAINER"`
+URL="http://$IP:$PORT/"
+
+open "$URL"
